@@ -1,0 +1,6 @@
+  
+ t=b+c
+ v=d+e
+ u=t-v
+ w = t+u
+ a=w
