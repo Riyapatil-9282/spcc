@@ -1,0 +1,332 @@
+lAB-1 symbol table
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class symbol {
+public:
+    unordered_map<char,int> hashmap;
+    
+   
+    void createTable(string temp){
+        for(int i=0;i<temp.length();i++){
+            
+            hashmap[temp[i]] = 100 + (rand() % 2000);
+        }
+        cout<<"Table created"<<"\n";
+    }
+   
+    void viewTable() {
+        cout<<"Symbol Table"<<"\n";
+        for(auto i : hashmap){
+            string type = isalpha(i.first) ? "identifier" : "operator";
+            cout<<"Symbol:"<<i.first<<"  Address:"<<i.second<<" Type:"<<type<<"\n";
+        }
+    }
+   
+    void removeSymbol(char n){
+        if(hashmap.find(n) != hashmap.end()){
+            hashmap.erase(n);
+            cout<<"Symbol removed"<<"\n";
+        }
+        else{
+            cout<<"Symbol does not exist"<<"\n";
+        }
+    }
+   
+    void enterSymbol(char n){
+        if(hashmap.find(n) != hashmap.end()){
+            cout<<"Symbol already exist"<<"\n";
+        }
+        else{
+        
+            hashmap[n] = 100 + (rand() % 2000);
+            cout<<"Symbol inserted"<<"\n";
+        }
+    }
+   
+    void searchSymbol(char n){
+        if(hashmap.find(n) != hashmap.end()){
+            cout<<"Symbol"<<n<<"exists at address:"<<hashmap[n]<<"\n";
+        }
+        else{
+            cout<<"Symbol does not exists"<<"\n";
+        }
+    }
+   
+};
+
+int main() {
+    bool flag=true;
+    unordered_map<char,int> hashmap;
+   
+    symbol ob;
+    char n;
+    string temp;
+    int x;
+    while(flag){
+        cout<<"\n1. Create table 2. Search symbol 3. Enter symbol 4. Remove symbol 5. View table 6. Exit"<<"\n";
+        cout<<"Enter your choice:";
+        cin>>x;
+       
+        switch(x){
+            case 1:
+            cout<<"Enter the expression:";
+            cin>>temp;
+            ob.createTable(temp);
+            break;
+           
+            case 2:
+            cout<<"Enter the symbol you want to search:";
+            cin>>n;
+            ob.searchSymbol(n);
+           
+            break;
+           
+            case 3:
+            cout<<"Enter the symbol you want to add:";
+            cin>>n;
+            ob.enterSymbol(n);
+            break;
+           
+            case 4:
+            cout<<"Enter the symbol you want to remove:";
+            cin>>n;
+            ob.removeSymbol(n);
+            break;
+           
+            case 5:
+            ob.viewTable();
+            break;
+           
+            case 6:
+            flag = false;
+            break;
+        }
+       
+    }
+   
+     cout<<"program exited";
+
+    return 0;
+}
+
+______________________________________________________________________________________________________
+
+lab 2 lex analyser
+python file
+keywords = ['int', 'break', 'else', 'long', 'switch', 'case', 'char', 'return', 'continue',
+            'for', 'void', 'do', 'if', 'while', 'default', 'goto', 'sizeof', 'float', 'short']
+operators = ['+', '-', '*', '/', '%', '<', '>', '=', '&', '|']
+special_char = [';', '$', '#', '@']
+
+def is_numeric(ele):
+    try:
+        float(ele)
+        return True
+    except:
+        return False
+
+with open('Program 1.txt') as f:
+    data = f.read()
+    tokens = data.split()
+
+    for index, ele in enumerate(tokens):
+
+        if ele in keywords:
+            print(ele, "is a keyword") # int
+        elif ele in operators:
+            print(ele, "is an operator") # +
+        elif ele in special_char:
+            print(ele, "is a special character") # ;
+        elif is_numeric(ele):
+            print(ele, "is a constant") # 3.14
+        elif index > 0 and tokens[index-1] == "=":
+            print(ele, "is a literal") #
+        else:
+            print(ele, "is an identifier")
+
+
+
+# values that are directly specified in the code are literals 
+# EG: int a = 10;
+#     char c = "spcc"
+
+# however we further classify 10 as a constant
+
+# 10 = literal, constant
+# spcc = literal
+# a = identifierr
+
+
+txt file-
+int radius = 10 ;
+float PI = 3.14 ;
+char ch = 'R' ;
+char name = "Riya" ;
+# break ;
+______________________________________________________________________________________________________
+lab3- recursive descent parser
+
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+char input[100];
+int i=0,error;
+void E();
+void T();
+void Edash();
+void Tdash();
+void F();
+
+    void E(){
+     T();
+     Edash();
+   }
+   
+   
+    void Edash(){
+     if(input[i]=='+'){
+     i++;
+     T();
+     Edash();
+     }
+   }
+   
+   
+    void T(){
+        
+     F();
+     Tdash();
+    }
+    
+    
+    void Tdash(){
+     if(input[i]=='*'){
+        i++;
+        F();
+        Tdash();
+      }
+    }
+    
+    
+    void F()
+     {
+          if(isalnum(input[i]))i++;
+          else if(input[i]=='(')
+          {
+          i++;
+          E();
+          if(input[i]==')')
+          i++;
+
+          else error=1;
+            }
+          else error=1;
+          }
+
+ void main()
+          {
+              i=0;
+             error=0;
+                printf("\n\nEnter an arithmetic expression   :  "); 
+                gets(input);
+                E();
+                if(strlen(input)==i&&error==0)
+                   printf("\nThe String is parsed successfully!!\n");
+                else printf("\nThe String is Rejected!!!\n");
+            }
+
+______________________________________________________________________________________________________
+
+
+
+lab-4 intermediate code generator
+
+print("1. Assignment\n2. Arithmetic\n3. Relation\n4. Exit")
+
+while True:
+    n = int(input("\n Enter your choice: "))
+    match n:
+        case 1:
+            three_addr_code = input("Enter the Assignment operation: ")
+            temp1,temp2 = three_addr_code.split('=')
+            print(f'temp={temp2}')
+            print(f'{temp1}=temp')
+        case 2:
+            three_addr_code = input("Enter the arithmatic operation: ")
+            temp1,temp2 = three_addr_code[:3],three_addr_code[3:]
+            print(f'temp={temp1}')
+            print(f'temp1=temp{temp2}')
+        case 3:
+            three_addr_code = input("Enter relational expression: ")
+            addr = 100
+            print(f'{addr} if {three_addr_code} goto {addr+3}')
+            addr+=1
+            print(f'{addr} T=0')
+            addr+=1
+            print(f'{addr} goto {addr+2}')
+            addr+=1
+            print(f'{addr} T=1')
+        case 4:
+            break
+
+import random
+
+while True:
+    choice = int(input('\nEnter your choice : \n1.Create Table\n2.Search Table\n3.Insert a symbol\n4.Remove a symbol\n5.View Table\n6.Exit\n'))
+    match choice:
+        case 1:
+            table = dict()
+            symbols = input('\nEnter the statement: ')
+            for i in symbols:
+                if i not in ['+','-','*','/','=']:
+                    typeofChar = 'identifier'
+                else:
+                    typeofChar = 'operator'
+                table[i] = [random.randint(1000, 3000),typeofChar]
+        case 2:
+            sym = input('\nEnter the symbol to be searched : ')
+            if sym in table.keys():
+                print(f'Symbol : {sym} Address : {table[sym][0]} Type : {table[sym][1]}')
+            else:
+                print('Symbol is not present in table')
+        case 3:
+            sym = input('Enter the symbol to be inserted : ')
+            if sym not in table.keys():
+                if i not in ['+','-','*','/','=']:
+                    typeofChar = 'identifier'
+                else:
+                    typeofChar = 'operator'
+                table[sym] = [random.randint(1000, 3000),typeofChar]
+            else :
+                print('Symbol already exists')
+        case 4:
+            sym = input('Enter a symbol to be removed : ')
+            if sym in table.keys():
+                del table[sym]
+            else :
+                print('Symbol doesn\'t exist')
+        case 5:
+            try: 
+                if table:
+                    for sym in table.keys():
+                        print(f'Symbol : {sym} Address : {table[sym][0]} Type : {table[sym][1]}')
+            except NameError:
+                print('Table is empty')
+        case 6:
+            break
+
+______________________________________________________________________________________________________
+
+  
+______________________________________________________________________________________________________
+
+    
+
+
+
+
+
+
